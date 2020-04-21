@@ -23,8 +23,8 @@ public class SourceUtils {
 
     public static final int           NUM_OF_MEASUREMENTS = 100_000;
     public static final int           RANDOM_SEED         = 1;
-    public static final float         FAILURE_RATE        = 0.0001f;
-    public static final List<Integer> IDLE_PARTITIONS     = Arrays.asList(0, 4);
+    public static final float         FAILURE_RATE        = 0.05f;
+    public static final List<Integer> IDLE_PARTITIONS     = Arrays.asList(0, 2, 4, 6);
 
     public static FakeKafkaSource createFakeKafkaSource() {
         List<byte[]> serializedMeasurements = createSerializedMeasurements();

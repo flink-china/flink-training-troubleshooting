@@ -44,10 +44,12 @@ public class TroubledStreamingJobSolution2 {
         env.getConfig().setAutoWatermarkInterval(2000);
 
         //Checkpointing Configuration
-        env.enableCheckpointing(5000);
+        env.enableCheckpointing(10000);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(4000);
 
         DataStream<JsonNode> sourceStream = env
+                // ATTENTION! the fake kafka source could produce dirty data.
+                // ATTENTION! the fake kafka source contain some idle partitions.
                 .addSource(SourceUtils.createFakeKafkaSource())
                 .name("FakeKafkaSource")
                 .uid("FakeKafkaSource")
@@ -152,10 +154,6 @@ public class TroubledStreamingJobSolution2 {
             this.maxOutOfOrderness = maxOutOfOrderness.toMilliseconds();
             this.idleTimeout = idleTimeout.toMilliseconds();
             this.currentMaxTimestamp = Long.MIN_VALUE;
-        }
-
-        public long getMaxOutOfOrdernessInMillis() {
-            return maxOutOfOrderness;
         }
 
         @Override

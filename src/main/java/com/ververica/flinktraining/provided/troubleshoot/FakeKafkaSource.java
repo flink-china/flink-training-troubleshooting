@@ -85,6 +85,7 @@ public class FakeKafkaSource extends RichParallelSourceFunction<FakeKafkaRecord>
                 byte[] serializedMeasurement =
                         serializedMeasurements.get(rand.nextInt(serializedMeasurements.size()));
 
+                // WARNING: mock dirty source data.
                 if (rand.nextFloat() > 1 - poisonPillRate) {
                     serializedMeasurement = Arrays.copyOf(serializedMeasurement, 10);
                 }

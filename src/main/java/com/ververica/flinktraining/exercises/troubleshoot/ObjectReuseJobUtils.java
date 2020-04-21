@@ -7,6 +7,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.state.filesystem.FsStateBackend;
+import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.FileUtils;
 
@@ -38,6 +39,8 @@ public class ObjectReuseJobUtils {
             env.setStateBackend(stateBackend);
         } else {
             env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StateBackend stateBackend = new MemoryStateBackend();
+            env.setStateBackend(stateBackend);
         }
 
         env.getConfig().setGlobalJobParameters(parameters);

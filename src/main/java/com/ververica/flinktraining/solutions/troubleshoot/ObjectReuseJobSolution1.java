@@ -36,7 +36,7 @@ public class ObjectReuseJobSolution1 {
         }
 
         //Checkpointing Configuration
-        env.enableCheckpointing(5000);
+        env.enableCheckpointing(10000);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(4000);
 
         SingleOutputStreamOperator<ExtendedMeasurement> temperatureStream = env

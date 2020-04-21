@@ -4,6 +4,7 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.metrics.DescriptiveStatisticsHistogram;
+import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -42,10 +43,12 @@ public class TroubledStreamingJob {
         env.getConfig().setAutoWatermarkInterval(2000);
 
         //Checkpointing Configuration
-        env.enableCheckpointing(5000);
+        env.enableCheckpointing(10000);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(4000);
 
         DataStream<JsonNode> sourceStream = env
+                // ATTENTION! the fake kafka source could produce dirty data.
+                // ATTENTION! the fake kafka source contain some idle partitions.
                 .addSource(SourceUtils.createFakeKafkaSource())
                 .name("FakeKafkaSource")
                 .uid("FakeKafkaSource")
