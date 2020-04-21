@@ -1,19 +1,21 @@
 # Apache Flink® Troubleshooting Training
 
-## 介绍
+## Introduction
 
-这个repo存放了"Apache Flink Troubleshooting"培训相关的资料。  
+This repository provides the basis of the hands-on part of the "Apache Flink Troubleshooting" training session.
 
-### 前提
+### Requirements
 
-你需要如下工具进行开发：
+To make use of this repository participants will need:
 
 * git
 * JDK 8
 * maven
 * a Java IDE (Intellij IDEA/Eclipse)
 
-### 培训准备
+### Training Preparations
+
+In order to avoid potential issues with the WiFi at the training venue, please checkout and build the project prior to the training:
 
 ```bash
 git clone git@github.com:flink-china/flink-training-troubleshooting.git
@@ -21,17 +23,19 @@ cd flink-training-troubleshooting
 mvn clean package
 ```
 
-### 内容组成
+### Infrastructure
 
-可以在本地址执行 `TroubledStreamingJob` 或者再 Ververica Platform 上运行。
+During the training, participants will be asked to run the Flink job `TroubledStreamingJob` locally as well as on Ververica Platform.
 
-### 本地执行
+### Running Locally
 
-找到测试文件中的 `TroubledStreamingJobRunner`， 调用`TroubledStreamingJob`的main方法。一旦开始运行后，你可以通过访问 http://localhost:8081 查看Flink UI
+Just run the test in `TroubledStreamingJobRunner` which will call the main-method of `TroubledStreamingJob` with a local configuration and automatically pulls in dependencies with "provided" scope.
 
-### Flink 作业介绍
+Once running, you can access Flink's Web UI via http://localhost:8081.
 
-这个Flink作业从8个 partitions的FakeKafka读取measurement数据. 数据结果是基于一秒的窗口输出，整体的流程如下：
+### The Flink Job
+
+This simple Flink job reads measurement data from a Kafka topic with eight partitions. For the purpose of this training the `KafkaConsumer` is replaced by `FakeKafkaSource`. The result of a calculation based on the measurement value is averaged over 1 second. The overall flow is depicted below:
 
 ```
 +-------------------+     +-----------------------+     +-----------------+     +----------------------+     +--------------------+
@@ -47,8 +51,7 @@ mvn clean package
                                                                                                              +--------------------+
 ```
 
-在本地模式, sinks 会输出到 `stdout` (NormalOutput) 以及 `stderr` (LateDataSink)。
-而在分布式模式，会使用 `DiscardingSink` 作为相关的sink。
+In local mode, sinks print their values on `stdout` (NormalOutput) and `stderr` (LateDataSink) for simplified debugging while as without local mode, a `DiscardingSink` is used for each sink.
 
 ----
 
